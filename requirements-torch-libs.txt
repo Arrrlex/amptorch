@@ -1,12 +1,8 @@
 --find-links https://data.pyg.org/whl/torch-1.10.0+cu111.html
 --find-links https://pytorch-geometric.com/whl/torch-1.10.0+cu111.html
 
-ase==3.21
-matplotlib>=3.3,<3.4
-pre-commit>=2.2,<2.3
-tqdm>=4.45,<4.46
-h5py
-cffi
-wandb
-lmdb==1.0.0
-skorch>=0.10,<0.11
+torch-scatter
+torch-sparse
+torch-cluster
+torch-spline-conv
+torch-geometric
