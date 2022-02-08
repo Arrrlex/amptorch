@@ -1,5 +1,6 @@
---find-links https://data.pyg.org/whl/torch-1.10.0+cu111.html
+--find-links https://data.pyg.org/whl/torch-1.9.0+cu111.html
 
+torch==1.9.0
 ase==3.21
 matplotlib>=3.3,<3.4
 pre-commit>=2.2,<2.3
