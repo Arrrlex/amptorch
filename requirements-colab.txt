@@ -10,6 +10,9 @@ wandb
 lmdb==1.0.0
 skorch>=0.10,<0.11
 torch-scatter
+torch-sparse
 torch-cluster
 torch-spline-conv
 torch-geometric
+
+.
