@@ -333,6 +333,58 @@ class AtomsTrainer:
         elapsed_time = time.time() - stime
         print(f"Training completed in {elapsed_time}s")
 
+    def predict_from_feats(self, data_list, disable_tqdm=True, get_latent_layer=None):
+        if len(data_list) == 0:
+            raise Exception("No images for predict!")
+
+        self.net.module.eval()
+        collate_fn = DataCollater(train=False, forcetraining=self.forcetraining)
+
+        predictions = {"energy": [], "forces": []}
+
+
+        # get the latent layer
+        if get_latent_layer is not None:
+            predictions["latent"] = []
+            def hook2get_latent(self, input, output):
+                _latent = output.detach().numpy()
+                _latent_mean = np.mean(_latent, axis=0)
+                predictions["latent"].append(_latent_mean)
+
+            # implement as get_latent_layer are the big-picture-sense of latent layer
+            if get_latent_layer is True:
+                latent_layer = -2
+            else:
+                latent_layer = -1
+                latent_layer += get_latent_layer * 3 + 2
+
+            print("latent layer {}".format(latent_layer))
+            self.net.module.model.model_net[latent_layer].register_forward_hook(hook2get_latent)
+
+        # for data in data_list:
+        for idx, data in tqdm(
+            enumerate(data_list),
+            desc="Predicting",
+            total=len(data_list),
+            unit=" systems",
+            disable=disable_tqdm,
+        ):
+            collated = collate_fn([data]).to(self.device)
+            energy, forces = self.net.module([collated])
+
+            energy = self.target_scaler.denorm(
+                energy.detach().cpu(), pred="energy"
+            ).tolist()
+            forces = self.target_scaler.denorm(
+                forces.detach().cpu(), pred="forces"
+            ).numpy()
+
+            predictions["energy"].extend(energy)
+            predictions["forces"].append(forces)
+
+        return predictions
+
+
     def predict(self, images, disable_tqdm=True, get_latent_layer=None):
         if len(images) < 1:
             warnings.warn("No images found!", stacklevel=2)
@@ -366,11 +418,11 @@ class AtomsTrainer:
                 _latent = output.detach().numpy()
                 _latent_mean = np.mean(_latent, axis=0)
                 predictions["latent"].append(_latent_mean)
-            
+
             # implement as get_latent_layer are the big-picture-sense of latent layer
             if get_latent_layer is True:
                 latent_layer = -2
-            else: 
+            else:
                 latent_layer = -1
                 latent_layer += get_latent_layer * 3 + 2
 
