@@ -5,7 +5,7 @@ import copy
 import numpy as np
 import torch
 import lmdb
-from tqdm import tqdm
+from tqdm.auto import tqdm
 from ase import Atoms
 from ase.calculators.emt import EMT
 

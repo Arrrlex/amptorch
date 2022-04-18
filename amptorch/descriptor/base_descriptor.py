@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 import h5py
 import numpy as np
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from .util import get_hash, list_symbols_to_indices, validate_image
 

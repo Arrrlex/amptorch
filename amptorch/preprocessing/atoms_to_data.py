@@ -11,9 +11,9 @@ try:
     if shell == "ZMQInteractiveShell":
         from tqdm.notebook import tqdm
     else:
-        from tqdm import tqdm
+        from tqdm.auto import tqdm
 except NameError:
-    from tqdm import tqdm
+    from tqdm.auto import tqdm
 
 
 class AtomsToData:

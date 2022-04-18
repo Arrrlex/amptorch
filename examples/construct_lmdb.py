@@ -4,7 +4,7 @@ import lmdb
 import numpy as np
 import ase.io
 import torch
-from tqdm import tqdm
+from tqdm.auto import tqdm
 from amptorch.preprocessing import AtomsToData, FeatureScaler, TargetScaler
 from amptorch.descriptor.Gaussian import Gaussian
 from ase import Atoms
